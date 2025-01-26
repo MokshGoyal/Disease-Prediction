@@ -7,6 +7,10 @@ import subprocess
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, message="Proactor event loop does not implement add_reader family of methods required for zmq")
 
+import subprocess
+import sys
+
+# List of required modules
 
 
 # ANSI color codes
@@ -36,6 +40,30 @@ class colors:
 os.environ['PYDEVD_DISABLE_FILE_VALIDATION'] = '1'
 os.environ['PYZMQ_WARNINGS'] = 'ignore'
 
+required_modules = [
+    "numpy",
+    "pandas",
+    "streamlit",
+    "streamlit_option_menu",
+    "pickle",  # Note: pickle is part of Python's standard library; no installation needed.
+    "matplotlib",
+    "sklearn",
+]
+
+# Check and install modules
+def install_modules(modules):
+    for module in modules:
+        try:
+            # Import the module to check if it's already installed
+            __import__(module)
+            print(f"'{module}' is already installed.")
+        except ImportError:
+            # If not installed, install it using pip
+            print(f"'{module}' is not installed. Installing now...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", module])
+
+if __name__ == "__main__":
+    install_modules(required_modules)
 print(colors.BLUE+ "Running Aids_disease_prediction.ipynb"+ colors.RESET)
 notebook_path = "Scripts/Aids_disease_prediction.ipynb"
 with open(notebook_path) as f:
